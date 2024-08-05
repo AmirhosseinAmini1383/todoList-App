@@ -1,0 +1,312 @@
+@import url("./fonts.css");
+@import url("./colors.css");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Vazirmatn;
+  list-style: none;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  font-family: Vazirmatn;
+  background-color: var(--color-primary-200);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  position: relative;
+  width: 100%;
+}
+header {
+  width: 100%;
+}
+.header__title {
+  text-shadow: var(--color-primary-600) 1px 0 5px;
+  color: var(--color-primary-700);
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+.header__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-primary-700);
+}
+.header__content h2 {
+  font-size: 1.5rem;
+}
+.container__todo {
+  width: 100%;
+}
+.form__container {
+  margin-top: 1rem;
+}
+.todo__form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1rem;
+}
+.todo.todo__input {
+  border: 1px solid var(--color-primary-100);
+  width: 100%;
+  font-weight: 700;
+  outline: 0;
+  padding-left: 1rem;
+  box-shadow: var(--color-primary-100) 0px 0 2px;
+  transition: all 0.3s ease-in-out;
+}
+.todo.todo__input::placeholder {
+  color: var(--color-primary-600);
+}
+.todo__input:focus {
+  box-shadow: var(--color-primary-400) 0px 0 5px;
+}
+.add__todo {
+  font-size: 1rem;
+  font-weight: 900;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  border: 0;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-500);
+  position: absolute;
+  top: 2.5px;
+  right: 5px;
+  text-align: center;
+  border: 1px solid var(--color-primary-200);
+}
+.todo {
+  height: 25px;
+  font-size: 1rem;
+  font-weight: 400;
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-600);
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.completed {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.todo__title {
+  font-weight: bold;
+  flex: 1;
+  text-align: left;
+  padding-top: 0.2rem;
+  padding-left: 0.3rem;
+}
+.todo__createdAt {
+  font-size: 1rem;
+  padding-top: 0.3rem;
+}
+.todo button {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--border-radius-tiny);
+  background-color: var(--color-primary-200);
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon {
+  width: 10px;
+  height: 10px;
+}
+.select {
+  position: relative;
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+}
+.filter-todos {
+  width: 60%;
+  height: 25px;
+  padding: 0rem 0.5rem;
+  border: 0;
+  border-radius: var(--border-radius-tiny);
+  background-color: var(--color-primary-0);
+  font-size: 1.2rem;
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid var(--color-primary-100);
+  outline: none;
+  font-weight: 700;
+}
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background-color: var(--color-primary-100);
+  width: 15px;
+  height: 13px;
+  padding-top: 0.3rem;
+  border-radius: var(--border-radius-tiny);
+  color: var(--color-primary-500);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  position: absolute;
+  background-color: var(--color-primary-0);
+  border-radius: var(--border-radius-tiny);
+  overflow-y: auto;
+  position: absolute;
+  top: 1;
+  right: 37px;
+  width: 80px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+.modal__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+.modalcontent {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  padding-left: 1rem;
+  font-weight: 500;
+}
+.modalcontent:hover {
+  background-color: var(--color-primary-300);
+}
+.modalcontent > p {
+  padding-top: 0.25rem;
+  padding-left: 0.5rem;
+}
+.modalcontent > p,
+.modalcontent > svg,
+.modalcontent > use {
+  pointer-events: none;
+}
+.btn__event > svg,
+.btn__event > use {
+  pointer-events: none;
+}
+.modalcontent.todoedit > p {
+  color: var(--color-primary-600);
+}
+.modalcontent.tododone > p {
+  color: var(--color-primary-600);
+}
+.modalcontent.tododelete > p {
+  color: var(--color-red-500);
+}
+@media screen and (min-width: 768px) {
+  .modal {
+    border-radius: var(--border-radius-sm);
+  }
+  .header__title {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+  .header__content h2 {
+    font-size: 3rem;
+  }
+  .filter-todos {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    width: 1500px;
+    margin: 0 auto;
+  }
+  .todo.todo__input {
+    height: 60px;
+  }
+  .todo {
+    height: 50px;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .add__todo {
+    font-size: 3rem;
+    height: 50px;
+    width: 50px;
+    top: 5px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .todo__createdAt {
+    font-size: 2rem;
+  }
+  .todo button {
+    margin: 0 1rem;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+  .header__title {
+    font-size: 4rem;
+  }
+  .header__content h2 {
+    font-size: 4rem;
+  }
+  .filter-todos {
+    width: 70%;
+    height: 40px;
+    padding: 0rem 1rem;
+  }
+  .select::after {
+    width: 20px;
+    height: 20px;
+  }
+  .modal {
+    width: 150px;
+    right: 56px;
+  }
+  .modalcontent {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  .modalcontent > p {
+    font-size: 1.7rem;
+  }
+}
