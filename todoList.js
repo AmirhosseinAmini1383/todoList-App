@@ -3,24 +3,31 @@ const todoInput = document.querySelector(".todo__input");
 const todoForm = document.querySelector(".todo__form");
 const todolist = document.querySelector(".todolist");
 const selectFilters = document.querySelector(".filter-todos");
-let todos = [];
 let filterValue = "all";
+let editingId = null; // برای ذخیره ID تسکی که در حال ویرایش است
 // functions
 const addNewTodo = (e) => {
   e.preventDefault();
   if (!todoInput.value) return null;
+  const todos = getAllTodos();
   const newTodo = {
-    id: Date.now(),
+    id: editingId || Date.now(),
     createdAt: new Date().toISOString(),
     title: todoInput.value,
     isCompleted: false,
   };
-  todos.push(newTodo);
-  // createTodos(todos);
-  todoInput.value = "";
+  // اگر در حال ویرایش هستیم، تسک قبلی را به‌روزرسانی کنیم
+  if (editingId) {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === editingId ? newTodo : todo
+    );
+    saveAllTodos(updatedTodos);
+  } else {
+    saveTodo(newTodo);
+  }
+  resetInput();
   filterTodos();
 };
-
 const createTodos = (todos) => {
   let result = "";
   todos.forEach((todo) => {
@@ -67,8 +74,10 @@ const createTodos = (todos) => {
       </li>`;
   });
   todolist.innerHTML = result;
+  setupEventListeners();
+};
 
-  // modal
+const setupEventListeners = () => {
   const modals = document.querySelectorAll(".modal");
   modals.forEach((modal) => {
     modal.addEventListener("mouseleave", () => {
@@ -77,44 +86,60 @@ const createTodos = (todos) => {
     modal.addEventListener("click", (e) => e.stopPropagation());
   });
 
-  // removeBtn
-  const removeBtns = document.querySelectorAll(".tododelete");
-  removeBtns.forEach((btn) => {
+  const deleteBtns = document.querySelectorAll(".tododelete");
+  deleteBtns.forEach((btn) => {
     btn.addEventListener("click", removeTodos);
   });
 
-  // doneBtn
-  const checkBtns = document.querySelectorAll(".tododone");
-  checkBtns.forEach((btn) => {
+  const doneBtns = document.querySelectorAll(".tododone");
+  doneBtns.forEach((btn) => {
     btn.addEventListener("click", checkTodos);
   });
 
-  // Add click event to buttons only once
-  const openModalBtns = document.querySelectorAll(".btn__event");
-  openModalBtns.forEach((btn) => {
+  document.querySelectorAll(".btn__event").forEach((btn) => {
     btn.addEventListener("click", () => {
-      // Select the modal corresponding to the button
-      const modal = btn.nextElementSibling;
+      const modal = btn.closest("li").querySelector(".modal");
       modal.classList.remove("hidden");
     });
   });
+
+  const editBtns = document.querySelectorAll(".todoedit");
+  editBtns.forEach((btn) => {
+    btn.addEventListener("click", editTodo);
+  });
 };
+
+// Functionality for removing, checking, and editing todos
 function removeTodos(e) {
-  const todoId = +e.target.closest(".tododelete").dataset.todoid;
-  todos = todos.filter((t) => t.id !== todoId);
-  console.log(todos);
+  const todos = getAllTodos();
+  const todoId = +e.target.dataset.todoid;
+  const updatedTodos = todos.filter((t) => t.id !== todoId);
+  saveAllTodos(updatedTodos);
   filterTodos();
 }
 function checkTodos(e) {
-  console.log(+e.target.closest(".tododone").dataset.todoid);
-  console.log(todos);
-  const todoId = +e.target.closest(".tododone").dataset.todoid;
+  const todos = getAllTodos();
+  const todoId = +e.target.dataset.todoid;
   const todo = todos.find((t) => t.id === todoId);
   todo.isCompleted = !todo.isCompleted;
+  saveAllTodos(todos);
   filterTodos();
 }
+function editTodo(e) {
+  const todoId = +e.target.dataset.todoid;
+  const todos = getAllTodos();
+  const todo = todos.find((t) => t.id === todoId);
+  todoInput.value = todo.title; // مقدار ورودی را تنظیم می‌کند
+  editingId = todoId; // ID تسک در حال ویرایش را ذخیره می‌کند
+}
+
+const resetInput = () => {
+  todoInput.value = "";
+  editingId = null; // Reset editingId
+};
+
 const filterTodos = () => {
-  // const filter = e.target.value;
+  const todos = getAllTodos();
   switch (filterValue) {
     case "all":
       createTodos(todos);
@@ -133,9 +158,29 @@ const filterTodos = () => {
   }
 };
 
-// events
+// Local Storage Functions
+const getAllTodos = () => {
+  return JSON.parse(localStorage.getItem("todos")) || [];
+};
+
+const saveTodo = (todo) => {
+  const savedTodos = getAllTodos();
+  savedTodos.push(todo);
+  localStorage.setItem("todos", JSON.stringify(savedTodos));
+};
+
+const saveAllTodos = (todos) => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
+// Event Listeners
 selectFilters.addEventListener("change", (e) => {
   filterValue = e.target.value;
   filterTodos();
 });
+
 todoForm.addEventListener("submit", addNewTodo);
+
+document.addEventListener("DOMContentLoaded", () => {
+  createTodos(getAllTodos());
+});
