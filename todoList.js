@@ -4,7 +4,8 @@ const todoForm = document.querySelector(".todo__form");
 const todolist = document.querySelector(".todolist");
 const selectFilters = document.querySelector(".filter-todos");
 let filterValue = "all";
-let editingId = null; // برای ذخیره ID تسکی که در حال ویرایش است
+let editingId = null; 
+
 // functions
 const addNewTodo = (e) => {
   e.preventDefault();
@@ -37,13 +38,12 @@ const createTodos = (todos) => {
         <p class="todo__title ${todo.isCompleted ? "completed" : ""}">
           ${todo.title}
         </p>
-        <span class="todo__createdAt ${
-          todo.isCompleted ? "completed" : ""
-        }">${new Date(todo.createdAt).toLocaleDateString("fa-IR", {
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    })}</span>      
+        <span class="todo__createdAt ${todo.isCompleted ? "completed" : ""
+      }">${new Date(todo.createdAt).toLocaleDateString("fa-IR", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+      })}</span>      
         <button class="btn__event">
           <svg class="icon">
             <use xlink:href="assets/images/icon.svg#three-dots-vertical-light"></use>

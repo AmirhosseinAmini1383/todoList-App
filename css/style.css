@@ -4,15 +4,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Vazirmatn;
-  list-style: none;
 }
 html {
   font-size: 62.5%;
 }
 body {
   font-family: Vazirmatn;
-  background-color: var(--color-primary-200);
+  background-color: var(--color-primary-100);
 }
 .container {
   display: flex;
