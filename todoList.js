@@ -4,7 +4,7 @@ const todoForm = document.querySelector(".todo__form");
 const todolist = document.querySelector(".todolist");
 const selectFilters = document.querySelector(".filter-todos");
 let filterValue = "all";
-let editingId = null; 
+let editingId = null;
 
 // functions
 const addNewTodo = (e) => {
@@ -39,8 +39,8 @@ const createTodos = (todos) => {
           ${todo.title}
         </p>
         <span class="todo__createdAt ${todo.isCompleted ? "completed" : ""
-      }">${new Date(todo.createdAt).toLocaleDateString("fa-IR", {
-        year: "2-digit",
+      }">${new Date(todo.createdAt).toLocaleDateString("En-uk", {
+        year: "numeric",
         month: "2-digit",
         day: "2-digit",
       })}</span>      
@@ -51,19 +51,20 @@ const createTodos = (todos) => {
         </button>
         <div class="modal hidden">
           <div class="modal__container">
-            <div class="modalcontent todoedit" data-todoId=${todo.id}>
+            <div class="modal-content todoedit" data-todoId=${todo.id}>
               <svg class="icon">
                 <use xlink:href="assets/images/icon.svg#edit"></use>
               </svg>
               <p>Edit</p>
             </div>
-            <div class="modalcontent tododone" data-todoId=${todo.id}>
+            <div class="modal-content tododone" data-todoId=${todo.id}>
               <svg class="icon">
                 <use xlink:href="assets/images/icon.svg#task-done"></use>
               </svg>
-              <p>Done</p>
+              <p> ${todo.isCompleted ? "Undone" : "Done"
+      }</p>
             </div>
-            <div class="modalcontent tododelete" data-todoId=${todo.id}>
+            <div class="modal-content tododelete" data-todoId=${todo.id}>
               <svg class="icon">
                 <use xlink:href="assets/images/icon.svg#delete"></use>
               </svg>
@@ -158,6 +159,19 @@ const filterTodos = () => {
   }
 };
 
+
+// Event Listeners
+selectFilters.addEventListener("change", (e) => {
+  filterValue = e.target.value;
+  filterTodos();
+});
+
+todoForm.addEventListener("submit", addNewTodo);
+
+document.addEventListener("DOMContentLoaded", () => {
+  createTodos(getAllTodos());
+});
+
 // Local Storage Functions
 const getAllTodos = () => {
   return JSON.parse(localStorage.getItem("todos")) || [];
@@ -172,15 +186,3 @@ const saveTodo = (todo) => {
 const saveAllTodos = (todos) => {
   localStorage.setItem("todos", JSON.stringify(todos));
 };
-
-// Event Listeners
-selectFilters.addEventListener("change", (e) => {
-  filterValue = e.target.value;
-  filterTodos();
-});
-
-todoForm.addEventListener("submit", addNewTodo);
-
-document.addEventListener("DOMContentLoaded", () => {
-  createTodos(getAllTodos());
-});
