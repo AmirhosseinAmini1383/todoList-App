@@ -1,61 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>TodoListApp</title>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1 class="header__title">A GOAL WITHOUT A PLAN IS JUST A DREAM..</h1>
-        <div class="header__container">
-          <div class="header__content">
-            <h2>Todo List</h2>
-          </div>
-          <div class="select">
-            <select class="filter-todos" name="todos">
-              <option value="all">All</option>
-              <option value="completed">Completed</option>
-              <option value="uncompleted">Uncompleted</option>
-            </select>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <title>TodoListApp</title>
+  <!-- Google Font Import -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 class="header__title animate-character">A GOAL WITHOUT A PLAN IS JUST A DREAM..</h1>
+      <div class="header__container">
+        <div class="header__content">
+          <h2>Todo List</h2>
         </div>
-      </header>
-      <section class="container__todo">
-        <div class="form__container">
-          <form class="todo__form">
-            <input
-              type="text"
-              class="todo todo__input"
-              placeholder="+ Type New Task"
-            />
-            <button class="add__todo" type="submit">+</button>
-          </form>
+        <div class="select">
+          <select class="filter-todos" name="todos">
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="uncompleted">Uncompleted</option>
+          </select>
         </div>
-        <div class="todolist-container">
-          <ul class="todolist">
-            <!-- <li class="todo">
-              <img
-                class="icon"
-                src="assets/images/6-points.png"
-                alt="6-points"
-              />
-              <p class="todo__title">Test</p>
-              <span class="todo__createdAt">02/05/24</span>
-              <button class="btn__event">
-                <svg class="icon">
-                  <use
-                    xlink:href="assets/images/icon.svg#three-dots-vertical-light"
-                  ></use>
-                </svg>
-              </button>
-            </li> -->
-          </ul>
-        </div>
-      </section>
-    </div>
-    <script src="todoList.js"></script>
-  </body>
+      </div>
+    </header>
+    <section class="container__todo">
+      <div class="form__container">
+        <form class="todo__form">
+          <input type="text" class="todo__input" placeholder="+ Type New Task" />
+          <button class="add__todo" type="submit">+ ADD TODO</button>
+        </form>
+      </div>
+      <div class="todolist-container">
+        <ul class="todolist">
+        </ul>
+      </div>
+    </section>
+  </div>
+  <script src="todoList.js"></script>
+</body>
+
 </html>
