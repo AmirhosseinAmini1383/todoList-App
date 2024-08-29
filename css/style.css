@@ -273,6 +273,7 @@ header {
   right: 0;
   background: none;
   border: none;
+  cursor: pointer;
 }
 .edit__todo__form {
   width: 100%;
