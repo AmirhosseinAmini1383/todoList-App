@@ -3,31 +3,46 @@ const todoInput = document.querySelector(".todo__input");
 const todoForm = document.querySelector(".todo__form");
 const todolist = document.querySelector(".todolist");
 const selectFilters = document.querySelector(".filter-todos");
+const editModal = document.querySelector(".edit__modal");
+const closeEditModalBtn = document.querySelector(".close-modal");
+const backdrop = document.querySelector(".backdrop");
+const editModalInput = document.querySelector(".editInput");
+const editTodoForm = document.querySelector(".edit__todo__form");
 let filterValue = "all";
 let editingId = null; // برای ذخیره ID تسکی که در حال ویرایش است
+
 // functions
+const detailsCreateTodo = (title) => ({
+  id: editingId || Date.now(),
+  createdAt: new Date().toISOString(),
+  title,
+  isCompleted: false,
+});
+
 const addNewTodo = (e) => {
   e.preventDefault();
   if (!todoInput.value) return null;
+  let newTodo = detailsCreateTodo(todoInput.value);
+  saveTodo(newTodo);
+  resetInput();
+  filterTodos();
+};
+
+const handleEditSubmitModal = () => {
   const todos = getAllTodos();
-  const newTodo = {
-    id: editingId || Date.now(),
-    createdAt: new Date().toISOString(),
-    title: todoInput.value,
-    isCompleted: false,
-  };
-  // اگر در حال ویرایش هستیم، تسک قبلی را به‌روزرسانی کنیم
+  let editNewTodo = detailsCreateTodo(editModalInput.value);
   if (editingId) {
     const updatedTodos = todos.map((todo) =>
-      todo.id === editingId ? newTodo : todo
+      todo.id === editingId ? editNewTodo : todo
     );
     saveAllTodos(updatedTodos);
   } else {
-    saveTodo(newTodo);
+    saveTodo(editNewTodo);
   }
   resetInput();
   filterTodos();
 };
+
 const createTodos = (todos) => {
   let result = "";
   todos.forEach((todo) => {
@@ -40,7 +55,7 @@ const createTodos = (todos) => {
         <span class="todo__createdAt ${
           todo.isCompleted ? "completed" : ""
         }">${new Date(todo.createdAt).toLocaleDateString("fa-IR", {
-      year: "2-digit",
+      year: "numeric",
       month: "2-digit",
       day: "2-digit",
     })}</span>      
@@ -71,6 +86,7 @@ const createTodos = (todos) => {
             </div>
           </div>
         </div>
+        
       </li>`;
   });
   todolist.innerHTML = result;
@@ -81,6 +97,9 @@ const setupEventListeners = () => {
   const modals = document.querySelectorAll(".modal");
   modals.forEach((modal) => {
     modal.addEventListener("mouseleave", () => {
+      modal.classList.add("hidden");
+    });
+    modal.addEventListener("click", () => {
       modal.classList.add("hidden");
     });
     modal.addEventListener("click", (e) => e.stopPropagation());
@@ -106,19 +125,22 @@ const setupEventListeners = () => {
   const editBtns = document.querySelectorAll(".todoedit");
   editBtns.forEach((btn) => {
     btn.addEventListener("click", editTodo);
+    btn.addEventListener("click", () => {
+      backdrop.classList.remove("hidden");
+    });
   });
 };
 
 // Functionality for removing, checking, and editing todos
 function removeTodos(e) {
-  const todos = getAllTodos();
+  let todos = getAllTodos();
   const todoId = +e.target.dataset.todoid;
-  const updatedTodos = todos.filter((t) => t.id !== todoId);
-  saveAllTodos(updatedTodos);
+  todos = todos.filter((t) => t.id !== todoId);
+  saveAllTodos(todos);
   filterTodos();
 }
 function checkTodos(e) {
-  const todos = getAllTodos();
+  let todos = getAllTodos();
   const todoId = +e.target.dataset.todoid;
   const todo = todos.find((t) => t.id === todoId);
   todo.isCompleted = !todo.isCompleted;
@@ -129,12 +151,13 @@ function editTodo(e) {
   const todoId = +e.target.dataset.todoid;
   const todos = getAllTodos();
   const todo = todos.find((t) => t.id === todoId);
-  todoInput.value = todo.title; // مقدار ورودی را تنظیم می‌کند
-  editingId = todoId; // ID تسک در حال ویرایش را ذخیره می‌کند
+  editModalInput.value = todo.title;
+  editingId = todoId;
 }
 
 const resetInput = () => {
   todoInput.value = "";
+  editModalInput.value = "";
   editingId = null; // Reset editingId
 };
 
@@ -182,5 +205,18 @@ selectFilters.addEventListener("change", (e) => {
 todoForm.addEventListener("submit", addNewTodo);
 
 document.addEventListener("DOMContentLoaded", () => {
-  createTodos(getAllTodos());
+  const todos = getAllTodos();
+  createTodos(todos);
 });
+
+closeEditModalBtn.addEventListener("click", () => {
+  backdrop.classList.add("hidden");
+});
+
+editTodoForm.addEventListener("submit", () => {
+  backdrop.classList.add("hidden");
+});
+
+editTodoForm.addEventListener("submit", handleEditSubmitModal);
+
+editModal.addEventListener("click", (e) => e.stopPropagation());
