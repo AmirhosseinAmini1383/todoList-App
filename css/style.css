@@ -31,7 +31,8 @@ header {
   text-shadow: var(--color-primary-600) 1px 0 5px;
   color: var(--color-primary-700);
   font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .header__container {
   display: flex;
@@ -319,7 +320,6 @@ header {
   }
   .header__title {
     font-size: 3rem;
-    margin-bottom: 2rem;
   }
   .header__content h2 {
     font-size: 3rem;

@@ -124,9 +124,10 @@ const setupEventListeners = () => {
 
   const editBtns = document.querySelectorAll(".todoedit");
   editBtns.forEach((btn) => {
-    btn.addEventListener("click", editTodo);
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      editTodo(e);
       backdrop.classList.remove("hidden");
+      editModalInput.focus();
     });
   });
 };
@@ -207,6 +208,7 @@ todoForm.addEventListener("submit", addNewTodo);
 document.addEventListener("DOMContentLoaded", () => {
   const todos = getAllTodos();
   createTodos(todos);
+  todoInput.focus();
 });
 
 closeEditModalBtn.addEventListener("click", () => {
@@ -214,9 +216,7 @@ closeEditModalBtn.addEventListener("click", () => {
 });
 
 editTodoForm.addEventListener("submit", () => {
+  handleEditSubmitModal();
   backdrop.classList.add("hidden");
 });
-
-editTodoForm.addEventListener("submit", handleEditSubmitModal);
-
 editModal.addEventListener("click", (e) => e.stopPropagation());
