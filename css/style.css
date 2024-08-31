@@ -181,7 +181,6 @@ header {
   background-color: var(--color-primary-0);
   border-radius: var(--border-radius-tiny);
   overflow-y: auto;
-  position: absolute;
   top: 1;
   right: 37px;
   width: 80px;

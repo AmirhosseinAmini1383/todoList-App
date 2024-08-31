@@ -28,9 +28,12 @@ const addNewTodo = (e) => {
   filterTodos();
 };
 
-const handleEditSubmitModal = () => {
+const handleEditSubmitModal = (e) => {
+  e.preventDefault();
   const todos = getAllTodos();
+  const currentTodo = todos.find((t) => t.id === editingId);
   let editNewTodo = detailsCreateTodo(editModalInput.value);
+  editNewTodo.isCompleted = currentTodo.isCompleted;
   if (editingId) {
     const updatedTodos = todos.map((todo) =>
       todo.id === editingId ? editNewTodo : todo
@@ -76,7 +79,7 @@ const createTodos = (todos) => {
               <svg class="icon">
                 <use xlink:href="assets/images/icon.svg#task-done"></use>
               </svg>
-              <p>Done</p>
+              <p>${todo.isCompleted ? "Not Done" : "Done"}</p>
             </div>
             <div class="modalcontent tododelete" data-todoId=${todo.id}>
               <svg class="icon">
@@ -149,8 +152,8 @@ function checkTodos(e) {
   filterTodos();
 }
 function editTodo(e) {
+  let todos = getAllTodos();
   const todoId = +e.target.dataset.todoid;
-  const todos = getAllTodos();
   const todo = todos.find((t) => t.id === todoId);
   editModalInput.value = todo.title;
   editingId = todoId;
@@ -215,8 +218,8 @@ closeEditModalBtn.addEventListener("click", () => {
   backdrop.classList.add("hidden");
 });
 
-editTodoForm.addEventListener("submit", () => {
-  handleEditSubmitModal();
+editTodoForm.addEventListener("submit", (e) => {
+  handleEditSubmitModal(e);
   backdrop.classList.add("hidden");
 });
 editModal.addEventListener("click", (e) => e.stopPropagation());
