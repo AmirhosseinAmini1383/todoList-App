@@ -11,26 +11,22 @@
       <header>
         <h1 class="header__title">A GOAL WITHOUT A PLAN IS JUST A DREAM..</h1>
         <div class="header__container">
-          <div class="header__content">
-            <h2>Todo List</h2>
-          </div>
           <div class="select">
             <select class="filter-todos" name="todos">
-              <option value="all">All</option>
-              <option value="completed">Completed</option>
-              <option value="uncompleted">Uncompleted</option>
+              <option value="all">همه</option>
+              <option value="completed">تکمیل شده</option>
+              <option value="uncompleted">تکمیل نشده</option>
             </select>
+          </div>
+          <div class="header__content">
+            <h2>تودو لیست</h2>
           </div>
         </div>
       </header>
       <section class="container__todo">
         <div class="form__container">
           <form class="todo__form">
-            <input
-              type="text"
-              class="todo todo__input"
-              placeholder="+ Type New Task"
-            />
+            <input type="text" class="todo todo__input" />
             <button class="add__todo" type="submit">+</button>
           </form>
         </div>
@@ -59,12 +55,16 @@
         <div class="edit__modal">
           <div class="modal__container">
             <div class="edit__modal__header">
-              <p>Please Edit Your Todo !</p>
+              <p>Todo ویرایش</p>
               <button class="close-modal">❌</button>
             </div>
             <form class="edit__todo__form">
+              <label>عنوان</label>
               <input type="text" class="editInput" />
-              <button type="submit" class="btn submit--btn">Submit</button>
+              <div class="btn__container">
+                <button type="button" class="btn close--btn">انصراف</button>
+                <button type="submit" class="btn submit--btn">تایید</button>
+              </div>
             </form>
           </div>
         </div>

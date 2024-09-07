@@ -6,58 +6,41 @@ const selectFilters = document.querySelector(".filter-todos");
 const editModal = document.querySelector(".edit__modal");
 const closeEditModalBtn = document.querySelector(".close-modal");
 const backdrop = document.querySelector(".backdrop");
-const editModalInput = document.querySelector(".editInput");
-const editTodoForm = document.querySelector(".edit__todo__form");
+const editTodoInput = document.querySelector(".editInput");
+const updateTodoBtn = document.querySelector(".submit--btn");
+const closeModalBtn = document.querySelector(".close--btn");
 let filterValue = "all";
-let editingId = null; // برای ذخیره ID تسکی که در حال ویرایش است
 
 // functions
-const detailsCreateTodo = (title) => ({
-  id: editingId || Date.now(),
-  createdAt: new Date().toISOString(),
-  title,
-  isCompleted: false,
-});
 
 const addNewTodo = (e) => {
   e.preventDefault();
   if (!todoInput.value) return null;
-  let newTodo = detailsCreateTodo(todoInput.value);
+  const newTodo = {
+    id: Date.now(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    title: todoInput.value,
+    isCompleted: false,
+  };
   saveTodo(newTodo);
   resetInput();
   filterTodos();
 };
-
-const handleEditSubmitModal = (e) => {
-  e.preventDefault();
-  const todos = getAllTodos();
-  const currentTodo = todos.find((t) => t.id === editingId);
-  let editNewTodo = detailsCreateTodo(editModalInput.value);
-  editNewTodo.isCompleted = currentTodo.isCompleted;
-  if (editingId) {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === editingId ? editNewTodo : todo
-    );
-    saveAllTodos(updatedTodos);
-  } else {
-    saveTodo(editNewTodo);
-  }
-  resetInput();
-  filterTodos();
-};
-
 const createTodos = (todos) => {
   let result = "";
   todos.forEach((todo) => {
     result += `
       <li class="todo">
         <img class="icon" src="assets/images/6-points.png" alt="6-points" />
-        <p class="todo__title ${todo.isCompleted ? "completed" : ""}">
+        <p class="todo__title ${
+          todo.isCompleted ? "completed completed_text" : ""
+        }">
           ${todo.title}
         </p>
         <span class="todo__createdAt ${
           todo.isCompleted ? "completed" : ""
-        }">${new Date(todo.createdAt).toLocaleDateString("fa-IR", {
+        }">${new Date(todo.updatedAt).toLocaleDateString("fa-IR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -127,11 +110,7 @@ const setupEventListeners = () => {
 
   const editBtns = document.querySelectorAll(".todoedit");
   editBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      editTodo(e);
-      backdrop.classList.remove("hidden");
-      editModalInput.focus();
-    });
+    btn.addEventListener("click", openEditForm);
   });
 };
 
@@ -151,18 +130,40 @@ function checkTodos(e) {
   saveAllTodos(todos);
   filterTodos();
 }
-function editTodo(e) {
-  let todos = getAllTodos();
-  const todoId = +e.target.dataset.todoid;
-  const todo = todos.find((t) => t.id === todoId);
-  editModalInput.value = todo.title;
-  editingId = todoId;
+// MODAL EDIT:
+function openModal(e) {
+  backdrop.classList.remove("hidden");
+}
+function closeModal(e) {
+  backdrop.classList.add("hidden");
+}
+// EDIT SECTION:
+let todoToEditId;
+function openEditForm(e) {
+  openModal();
+  todoToEditId = +e.target.dataset.todoid;
+  const todos = getAllTodos();
+  const todo = todos.find((t) => t.id === todoToEditId);
+  editTodoInput.value = todo.title;
+  editTodoInput.focus();
+}
+function updateTodo(e) {
+  if (!editTodoInput.value) {
+    alert("Please enter a valid todo title !");
+    return;
+  }
+  const todos = getAllTodos();
+  const todo = todos.find((t) => t.id === todoToEditId);
+  todo.title = editTodoInput.value;
+  todo.updatedAt = new Date().toISOString();
+  saveAllTodos(todos);
+  filterTodos();
+  closeModal();
 }
 
 const resetInput = () => {
   todoInput.value = "";
-  editModalInput.value = "";
-  editingId = null; // Reset editingId
+  editTodoInput.value = "";
 };
 
 const filterTodos = () => {
@@ -214,12 +215,10 @@ document.addEventListener("DOMContentLoaded", () => {
   todoInput.focus();
 });
 
-closeEditModalBtn.addEventListener("click", () => {
-  backdrop.classList.add("hidden");
-});
+updateTodoBtn.addEventListener("click", updateTodo);
 
-editTodoForm.addEventListener("submit", (e) => {
-  handleEditSubmitModal(e);
-  backdrop.classList.add("hidden");
-});
+closeEditModalBtn.addEventListener("click", closeModal);
+
+closeModalBtn.addEventListener("click", closeModal);
+
 editModal.addEventListener("click", (e) => e.stopPropagation());
